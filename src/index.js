@@ -1,57 +1,43 @@
 module.exports = function check(str, bracketsConfig) {
-  let openKruglaya = 0;
-  let closeKruglaya = 0;
-  let openFigurnaya = 0;
-  let closeFigurnaya = 0;
-  let openKvadratnaya = 0;
-  let closeKvadratnaya = 0;
-  let palka = 0;
-  let index = 0;
   str = str.split('');
+  bracketsOpen = [];
+  bracketsClose = {};
+  stack = [];
+
+  for (let i = 0; i < bracketsConfig.length; i++) {
+    bracketsOpen.push(bracketsConfig[i][0]);
+    bracketsClose[bracketsConfig[i][1]] = bracketsOpen[i];
+  }
+  console.log(str);
+  console.log(bracketsOpen);
+  console.log(bracketsClose);
 
   for (let i = 0; i < str.length; i++) {
-    if (index < 0) return false;
-    
-    switch (str[i]) {
-      case '(':
-        openKruglaya++;
-        index++;
-        break;
-
-      case ')':
-        closeKruglaya--;
-        index--;
-        break;
-
-      case '{':
-        openFigurnaya++;
-        index++;
-        break;
-
-      case '}':
-        closeFigurnaya--;
-        index--;
-        break;
-
-      case '[':
-        openKvadratnaya++;
-        index++;
-        break;
-
-      case ']':
-        closeKvadratnaya--;
-        index--;
-        break;
-
-      case '|':
-        palka++
-        break;
-
-      default:
-        break;
+    console.log('str[i] ' + str[i]);
+    if ( bracketsOpen.includes(str[i]) && !(str[i] === '|' && stack[stack.length - 1] === '|') && !(str[i] === '7' && stack[stack.length - 1] === '7') && !(str[i] === '8' && stack[stack.length - 1] === '8') ) {
+      console.log('в stack зашел el ' + str[i]);
+      stack.push(str[i]);
+      console.log('stack: ' + stack);
+    } else {
+      console.log('в else ');
+      if (stack.length === 0) console.log(false); // return false;
+      if (stack[stack.length - 1] === bracketsClose[str[i]] ) {
+        console.log('удаляем из pop')
+        stack.pop();
+        console.log(stack);
+      } else {
+        console.log(false);
+        return false;
+      }
     }
   }
-  if (palka % 2 !== 0) return false;
 
-  return (openKruglaya + closeKruglaya + openFigurnaya + closeFigurnaya + openKvadratnaya + closeKvadratnaya === 0);
+  console.log('STACK в итоге: ' + stack)
+  if (stack.length === 0) {
+    console.log('stack.length === 0')
+    return true;
+  } else {
+    console.log('stack.length !== 0')
+    return false;
+  }
 }
