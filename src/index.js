@@ -20,10 +20,6 @@ module.exports = function check(str, bracketsConfig) {
       }
     }
   }
-
-  if (stack.length === 0) {
-    return true;
-  } else {
-    return false;
-  }
+  
+  return stack.length === 0;
 }
